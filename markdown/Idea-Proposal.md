@@ -57,15 +57,19 @@
       คำนวณเส้นทางตาม Clearance ของรถ/เรือ          จำกัดโควตา E-Voucher และควบคุมราคาเป็นธรรม
 ```
 
-### สมการและการคำนวณหลักของระบบ
-1. **การประเมินความลึกน้ำด้วย Computer Vision (Virtual Gauge):**
-   $$d_{\text{water}}(x, y) = H_{\text{ref}} - h_{\text{visible\_pixel}} \times \left(\frac{H_{\text{ref}}}{H_{\text{total\_pixel}}}\right)$$
-   โดยที่ $H_{\text{ref}}$ คือความสูงมาตรฐานของวัตถุอ้างอิง (เช่น ขอบฟุตบาท $15\text{ cm}$) และปรับแก้ด้วยมุมกล้อง (Homography Transformation)
+สมการและการคำนวณหลักของระบบ
+การประเมินความลึกน้ำด้วย Computer Vision (Virtual Gauge):
+d_water(x, y) = H_ref - h_visible_pixel × (H_ref / H_total_pixel)
+โดยที่ H_ref คือความสูงมาตรฐานของวัตถุอ้างอิง (เช่น ขอบฟุตบาท 15 cm) และปรับแก้ด้วยมุมกล้อง (Homography Transformation)
 
-2. **ฟังก์ชันต้นทุนการเดินทางแยกตามยานพาหนะ (Vehicle-Specific Edge Cost):**
-   $$W(e, v) = \begin{cases} \infty & \text{if } d_{\text{water}}(e) > C_{\max}(v) \text{ or } d_{\text{water}}(e) < C_{\min}(v) \\ L(e) \times \left(1 + \alpha \frac{d_{\text{water}}(e)}{C_{\max}(v)}\right) & \text{otherwise} \end{cases}$$
-   โดยที่ $d_{\text{water}}(e)$ คือระดับน้ำในซอย $e$, $C_{\max}(v)$ คือระดับน้ำสูงสุดที่ยานพาหนะ $v$ ลุยได้ (เช่น รถเก๋ง $15\text{ cm}$, กระบะ $45\text{ cm}$) และ $C_{\min}(v)$ คือระดับน้ำต่ำสุดสำหรับเรือท้องแบน ($30\text{ cm}$)
+ฟังก์ชันต้นทุนการเดินทางแยกตามยานพาหนะ (Vehicle-Specific Edge Cost):
+W(e, v) =
 
+infinity : เมื่อ d_water(e) > C_max(v) หรือ d_water(e) < C_min(v)
+
+L(e) × (1 + alpha × (d_water(e) / C_max(v))) : กรณีอื่นๆ
+
+โดยที่ d_water(e) คือระดับน้ำในซอย e, C_max(v) คือระดับน้ำสูงสุดที่ยานพาหนะ v ลุยได้ (เช่น รถเก๋ง 15 cm, กระบะ 45 cm) และ C_min(v) คือระดับน้ำต่ำสุดสำหรับเรือท้องแบน (30 cm)
 ---
 
 ## 5. Impact, Scalability & Sustainability (ผลกระทบ การขยายผล และความยั่งยืน)
