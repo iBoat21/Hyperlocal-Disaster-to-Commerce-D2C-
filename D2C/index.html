@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="th" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hyperlocal D2C Mesh — AI Crisis-to-Commerce Command Center</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Kanit & JetBrains Mono -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Noto Sans Thai Looped', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        slate: {
+                            850: '#131c2e',
+                            950: '#090d16',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #090d16;
+            color: #f1f5f9;
+            overflow-x: hidden;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+        /* SVG Map Animations */
+        .water-zone {
+            transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .road-segment {
+            transition: stroke 0.5s ease, stroke-width 0.3s ease, opacity 0.4s ease;
+        }
+        .active-route {
+            stroke-dasharray: 12 6;
+            animation: dashMove 1s linear infinite;
+        }
+        @keyframes dashMove {
+            to {
+                stroke-dashoffset: -18;
+            }
+        }
+        @keyframes pulseRing {
+            0% { transform: scale(0.9); opacity: 0.8; }
+            70% { transform: scale(1.6); opacity: 0; }
+            100% { transform: scale(1.6); opacity: 0; }
+        }
+        .pulse-circle {
+            transform-origin: center;
+            animation: pulseRing 2s infinite;
+        }
+        .glass-panel {
+            background: rgba(19, 28, 46, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(51, 65, 85, 0.6);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans selection:bg-cyan-500 selection:text-slate-950">
+
+    <!-- ==================== HEADER (TOP NAVIGATION & STATUS BAR) ==================== -->
+    <header class="glass-panel sticky top-0 z-40 px-4 lg:px-6 py-3 border-b border-slate-800">
+        <div class="max-w-[1600px] mx-auto flex flex-wrap items-center justify-between gap-4">
+            <!-- Brand & Track Badges -->
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/20">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path>
+                    </svg>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h1 class="text-lg md:text-xl font-bold tracking-wide text-white">HYPERLOCAL D2C MESH</h1>
+                        <span id="systemModeBadge" class="px-2.5 py-0.5 text-xs font-semibold rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/40 flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
+                            CRISIS MODE ACTIVE
+                        </span>
+                    </div>
+                    <p class="text-xs text-slate-400">โครงข่าย AI เตือนภัยน้ำท่วมระดับซอยย่อย นำทางกู้ภัย และกระจายเสบียงผ่าน SME ท้องถิ่น</p>
+                </div>
+            </div>
+
+            <!-- Track Indicators -->
+            <nav aria-label="Hackathon Tracks" class="hidden xl:flex items-center gap-2 text-xs">
+                <span class="px-3 py-1.5 rounded-lg bg-cyan-950/80 border border-cyan-700/60 text-cyan-300 font-medium">
+                    🛡️ Track 6: Resilient Communities (Core)
+                </span>
+                <span class="text-slate-600">➔</span>
+                <span class="px-3 py-1.5 rounded-lg bg-amber-950/80 border border-amber-700/60 text-amber-300 font-medium">
+                    🚑 Track 5: Smart Mobility
+                </span>
+                <span class="text-slate-600">➔</span>
+                <span class="px-3 py-1.5 rounded-lg bg-emerald-950/80 border border-emerald-700/60 text-emerald-300 font-medium">
+                    🏪 Track 2: SME & Local Economy
+                </span>
+            </nav>
+
+            <!-- Mode Toggle & Area Info -->
+            <div class="flex items-center gap-3">
+                <div class="text-right hidden sm:block">
+                    <div class="text-xs text-slate-400">พื้นที่จำลองสถานการณ์</div>
+                    <div class="text-sm font-semibold text-slate-200">ชุมชนคลองบางหลวง (12 ซอยย่อย)</div>
+                </div>
+                <button id="togglePeaceModeBtn" onclick="toggleSystemMode()" class="px-3.5 py-2 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-600 transition active:scale-95 flex items-center gap-2">
+                    <span id="modeBtnIcon">☀️</span>
+                    <span id="modeBtnText">สลับดู Peace-Time Mode</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==================== MAIN DASHBOARD CONTENT ==================== -->
+    <main class="flex-1 max-w-[1600px] w-full mx-auto p-4 lg:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- LEFT COLUMN: TRACK 6 & TRACK 5 CONTROLS (4 COLS) -->
+        <aside class="lg:col-span-4 flex flex-col gap-5">
+            
+            <!-- TRACK 6: HYPERLOCAL HAZARD PREDICTION -->
+            <section aria-labelledby="track6-heading" class="glass-panel rounded-2xl p-5 shadow-xl relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1.5 h-full bg-cyan-500"></div>
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-xs font-mono uppercase tracking-wider px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">Track 6 • Core Engine</span>
+                    <span class="text-xs text-slate-400 font-mono" id="sensorUpdateStatus">● AI Vision Sync: 98.4%</span>
+                </div>
+                <h2 id="track6-heading" class="text-base font-bold text-white mb-1">พยากรณ์ระดับน้ำท่วมรายซอย (AI Nowcasting)</h2>
+                <p class="text-xs text-slate-400 mb-4">เลื่อนแถบเวลาเพื่อจำลองมวลน้ำเอ่อล้นล่วงหน้า 0–6 ชั่วโมง จากเซนเซอร์คลองและกล้อง CCTV ร้านชำ</p>
+
+                <!-- Time Horizon Slider -->
+                <div class="bg-slate-900/90 p-4 rounded-xl border border-slate-800 mb-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <label for="timeSlider" class="text-xs font-semibold text-slate-300">กรอบเวลาคาดการณ์ (Forecast Horizon):</label>
+                        <span id="timeLabel" class="text-sm font-mono font-bold text-cyan-400 bg-cyan-950 px-2.5 py-0.5 rounded border border-cyan-700">ปัจจุบัน (T+0 ชม.)</span>
+                    </div>
+                    <input id="timeSlider" type="range" min="0" max="3" step="1" value="0" oninput="handleTimeChange(this.value)"
+                        class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-400">
+                    <div class="flex justify-between text-[11px] font-mono text-slate-400 mt-2">
+                        <span>T+0 ชม. (เริ่มปริ่ม)</span>
+                        <span>T+3 ชม. (ท่วมซอยต่ำ)</span>
+                        <span>T+6 ชม. (วิกฤต/ตัดขาด)</span>
+                        <span>น้ำลด (ฟื้นฟู)</span>
+                    </div>
+                </div>
+
+                <!-- Alley Water Depth Table -->
+                <div class="space-y-2.5">
+                    <div class="text-xs font-semibold text-slate-300 flex justify-between">
+                        <span>สถานะระดับน้ำในซอยย่อย (เทียบขอบฟุตบาท 15 ซม.)</span>
+                        <button onclick="openVisionModal()" class="text-cyan-400 hover:underline flex items-center gap-1">
+                            📷 ดู AI วัดน้ำจากภาพ
+                        </button>
+                    </div>
+                    <div id="alleyStatusList" class="space-y-2 max-h-48 overflow-y-auto pr-1">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- TRACK 5: SMART MOBILITY & CLEARANCE ROUTING -->
+            <section aria-labelledby="track5-heading" class="glass-panel rounded-2xl p-5 shadow-xl relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1.5 h-full bg-amber-500"></div>
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-xs font-mono uppercase tracking-wider px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/30">Track 5 • Smart Mobility</span>
+                    <span class="text-xs text-slate-400 font-mono">Dynamic Graph A*</span>
+                </div>
+                <h2 id="track5-heading" class="text-base font-bold text-white mb-1">คำนวณเส้นทางตามขีดจำกัดยานพาหนะ</h2>
+                <p class="text-xs text-slate-400 mb-3">เลือกยานพาหนะเพื่อคำนวณเส้นทางที่ปลอดภัยที่สุดในการเข้าถึงจุดอพยพและร้านค้า SME</p>
+
+                <!-- Vehicle Type Selector -->
+                <div class="grid grid-cols-3 gap-2 mb-4" role="radiogroup" aria-label="เลือกประเภทยานพาหนะ">
+                    <button onclick="selectVehicle('sedan')" id="veh-sedan" class="vehicle-btn p-2.5 rounded-xl border text-left transition flex flex-col justify-between bg-amber-500/20 border-amber-500 text-white">
+                        <div class="text-lg">🛵</div>
+                        <div>
+                            <div class="text-xs font-bold">รถเล็ก/มอเตอร์ไซค์</div>
+                            <div class="text-[10px] font-mono text-amber-300">ลุยน้ำ ≤ 15 ซม.</div>
+                        </div>
+                    </button>
+                    <button onclick="selectVehicle('pickup')" id="veh-pickup" class="vehicle-btn p-2.5 rounded-xl border text-left transition flex flex-col justify-between bg-slate-900/80 border-slate-700 text-slate-300 hover:border-slate-500">
+                        <div class="text-lg">🛻</div>
+                        <div>
+                            <div class="text-xs font-bold">กระบะยกสูง 4x4</div>
+                            <div class="text-[10px] font-mono text-slate-400">ลุยน้ำ ≤ 45 ซม.</div>
+                        </div>
+                    </button>
+                    <button onclick="selectVehicle('boat')" id="veh-boat" class="vehicle-btn p-2.5 rounded-xl border text-left transition flex flex-col justify-between bg-slate-900/80 border-slate-700 text-slate-300 hover:border-slate-500">
+                        <div class="text-lg">🚤</div>
+                        <div>
+                            <div class="text-xs font-bold">เรือท้องแบนกู้ภัย</div>
+                            <div class="text-[10px] font-mono text-slate-400">ร่องน้ำ ≥ 30 ซม.</div>
+                        </div>
+                    </button>
+                </div>
+
+                <!-- Route Computation Output Box -->
+                <div id="routeResultBox" class="bg-slate-900/95 p-3.5 rounded-xl border border-slate-800 text-xs space-y-1.5">
+                    <!-- Populated by JS -->
+                </div>
+            </section>
+        </aside>
+
+        <!-- CENTER COLUMN: INTERACTIVE TACTICAL COMMUNITY MAP (5 COLS) -->
+        <section aria-label="Interactive Community Hazard & Routing Map" class="lg:col-span-5 glass-panel rounded-2xl p-4 lg:p-5 flex flex-col justify-between shadow-2xl relative">
+            <!-- Map Top Overlay -->
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                <div>
+                    <h2 class="text-base font-bold text-white flex items-center gap-2">
+                        <span>🗺️ แผนที่โครงข่ายชุมชนแบบเรียลไทม์ (Hyperlocal Mesh Map)</span>
+                    </h2>
+                    <p class="text-xs text-slate-400">คลิกที่โหนดร้านค้า SME หรือจุดเสี่ยงบนแผนที่เพื่อตรวจสอบข้อมูลและสั่งจ่ายเสบียง</p>
+                </div>
+                <div class="flex items-center gap-2 text-[11px] font-mono">
+                    <span class="flex items-center gap-1 px-2 py-1 rounded bg-slate-900 border border-slate-700">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 inline-block"></span> เส้นทางปลอดภัย
+                    </span>
+                    <span class="flex items-center gap-1 px-2 py-1 rounded bg-slate-900 border border-slate-700">
+                        <span class="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block"></span> น้ำท่วมเกินพิกัดรถ
+                    </span>
+                </div>
+            </div>
+
+            <!-- Interactive SVG Map Canvas -->
+            <div class="relative w-full aspect-[4/3] bg-slate-950 rounded-xl border border-slate-800 overflow-hidden shadow-inner">
+                <svg id="communityMap" viewBox="0 0 700 520" class="w-full h-full select-none">
+                    <defs>
+                        <!-- Grid Pattern -->
+                        <pattern id="tacticalGrid" width="35" height="35" patternUnits="userSpaceOnUse">
+                            <path d="M 35 0 L 0 0 0 35" fill="none" stroke="#1e293b" stroke-width="0.7" />
+                        </pattern>
+                        <!-- Water Hazard Gradient -->
+                        <radialGradient id="waterGradHigh" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stop-color="#0284c7" stop-opacity="0.65" />
+                            <stop offset="100%" stop-color="#0369a1" stop-opacity="0.1" />
+                        </radialGradient>
+                        <radialGradient id="waterGradCritical" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stop-color="#e11d48" stop-opacity="0.6" />
+                            <stop offset="70%" stop-color="#0284c7" stop-opacity="0.4" />
+                            <stop offset="100%" stop-color="#0284c7" stop-opacity="0.0" />
+                        </radialGradient>
+                    </defs>
+
+                    <!-- Background Grid -->
+                    <rect width="700" height="520" fill="url(#tacticalGrid)" />
+
+                    <!-- Main Canal (คลองบางหลวง - ด้านบน) -->
+                    <path d="M 0 55 Q 220 80, 450 50 T 700 65 L 700 0 L 0 0 Z" fill="#0c4a6e" opacity="0.7" />
+                    <path d="M 0 55 Q 220 80, 450 50 T 700 65" fill="none" stroke="#38bdf8" stroke-width="3" stroke-dasharray="8 4" />
+                    <text x="20" y="32" fill="#7dd3fc" font-size="13" font-weight="600" font-family="Kanit">🌊 คลองบางหลวง (เซนเซอร์หลัก #101)</text>
+
+                    <!-- Dynamic Flood Water Polygons (Controlled by Time Slider) -->
+                    <g id="floodOverlayGroup">
+                        <!-- Flood Zone Soi 1 & 2 (Low Elevation) -->
+                        <ellipse id="floodZoneLow" class="water-zone" cx="230" cy="180" rx="140" ry="70" fill="url(#waterGradHigh)" opacity="0.25" />
+                        <!-- Flood Zone Soi 3 (Deep Basin) -->
+                        <ellipse id="floodZoneDeep" class="water-zone" cx="470" cy="240" rx="150" ry="95" fill="url(#waterGradCritical)" opacity="0.15" />
+                        <!-- Flood Zone Market Intersection -->
+                        <ellipse id="floodZoneMarket" class="water-zone" cx="350" cy="340" rx="180" ry="80" fill="url(#waterGradHigh)" opacity="0.0" />
+                    </g>
+
+                    <!-- Community Road Network (Edges) -->
+                    <g id="roadNetworkGroup" stroke-linecap="round">
+                        <!-- R1: Main Entrance (South) to Center Hub -->
+                        <line id="road-main-south" class="road-segment" x1="120" y1="460" x2="250" y2="350" stroke="#475569" stroke-width="10" />
+                        <!-- R2: Soi 1 (Low-lying road near canal) -->
+                        <line id="road-soi-1" class="road-segment" x1="120" y1="460" x2="170" y2="170" stroke="#475569" stroke-width="8" />
+                        <line id="road-soi-1b" class="road-segment" x1="170" y1="170" x2="360" y2="150" stroke="#475569" stroke-width="8" />
+                        <!-- R3: Soi 2 (Middle Spine Road) -->
+                        <line id="road-soi-2" class="road-segment" x1="250" y1="350" x2="360" y2="150" stroke="#475569" stroke-width="9" />
+                        <!-- R4: Soi 3 (Deep Basin Shortcut to Isolated Zone) -->
+                        <line id="road-soi-3" class="road-segment" x1="360" y1="150" x2="560" y2="190" stroke="#475569" stroke-width="8" />
+                        <line id="road-soi-3b" class="road-segment" x1="250" y1="350" x2="490" y2="300" stroke="#475569" stroke-width="8" />
+                        <!-- R5: High-ground Bypass (ซอยเนินสูง 4 - ถนนคันดิน) -->
+                        <path id="road-high-bypass" class="road-segment" d="M 120 460 Q 380 480 570 390 L 560 190" fill="none" stroke="#475569" stroke-width="9" />
+                        <!-- R6: Connection between SME 2 and Isolated Village -->
+                        <line id="road-east-link" class="road-segment" x1="490" y1="300" x2="560" y2="190" stroke="#475569" stroke-width="8" />
+                    </g>
+
+                    <!-- Active Computed Route Highlight -->
+                    <path id="activeRoutePath" class="active-route" d="M 120 460 L 250 350 L 360 150 L 560 190" fill="none" stroke="#10b981" stroke-width="5" />
+
+                    <!-- Road Depth Labels on Map -->
+                    <g font-family="JetBrains Mono" font-size="10" font-weight="600">
+                        <rect x="130" y="280" width="76" height="20" rx="4" fill="#0f172a" stroke="#334155" />
+                        <text id="map-label-soi1" x="168" y="294" fill="#38bdf8" text-anchor="middle">ซอย 1: 10cm</text>
+
+                        <rect x="265" y="235" width="76" height="20" rx="4" fill="#0f172a" stroke="#334155" />
+                        <text id="map-label-soi2" x="303" y="249" fill="#38bdf8" text-anchor="middle">ซอย 2: 5cm</text>
+
+                        <rect x="425" y="150" width="82" height="20" rx="4" fill="#0f172a" stroke="#334155" />
+                        <text id="map-label-soi3" x="466" y="164" fill="#fb7185" text-anchor="middle">ซอยลุ่ม 3: 20cm</text>
+
+                        <rect x="350" y="445" width="110" height="20" rx="4" fill="#0f172a" stroke="#334155" />
+                        <text id="map-label-bypass" x="405" y="459" fill="#34d399" text-anchor="middle">ทางเลี่ยงเนินสูง: 0cm</text>
+                    </g>
+
+                    <!-- Map Interactive Nodes (Rescue Origin, SMEs, Vulnerable Zone) -->
+                    <!-- Node 1: Rescue & Entry Point -->
+                    <g class="cursor-pointer" onclick="focusNodeInfo('origin')">
+                        <circle cx="120" cy="460" r="16" fill="#0f172a" stroke="#38bdf8" stroke-width="3" />
+                        <text x="120" y="465" text-anchor="middle" font-size="14">🚑</text>
+                        <text x="120" y="492" text-anchor="middle" fill="#e2e8f0" font-size="12" font-weight="600">จุดตั้งต้นปากซอยหลัก</text>
+                    </g>
+
+                    <!-- Node 2: SME #1 (ร้านป้าศรี มินิมาร์ท - กลางชุมชน) -->
+                    <g class="cursor-pointer" onclick="selectSME(0)">
+                        <circle cx="250" cy="350" r="17" fill="#064e3b" stroke="#10b981" stroke-width="3" />
+                        <text x="250" y="355" text-anchor="middle" font-size="14">🏪</text>
+                        <text x="250" y="382" text-anchor="middle" fill="#6ee7b7" font-size="11" font-weight="600">SME #1: ป้าศรีมินิมาร์ท</text>
+                    </g>
+
+                    <!-- Node 3: SME #2 (เจ๊หมวย ค้าส่ง & วัสดุก่อสร้าง - โซนเนินสูง) -->
+                    <g class="cursor-pointer" onclick="selectSME(1)">
+                        <circle cx="570" cy="390" r="17" fill="#064e3b" stroke="#10b981" stroke-width="3" />
+                        <text x="570" y="395" text-anchor="middle" font-size="14">🏪</text>
+                        <text x="570" y="422" text-anchor="middle" fill="#6ee7b7" font-size="11" font-weight="600">SME #2: เจ๊หมวยค้าส่ง (ที่ดอน)</text>
+                    </g>
+
+                    <!-- Node 4: SME #3 (ร้านลุงพล โชห่วยปากคลอง - เสี่ยงน้ำท่วม) -->
+                    <g class="cursor-pointer" onclick="selectSME(2)">
+                        <circle id="sme3-node-circle" cx="360" cy="150" r="16" fill="#064e3b" stroke="#10b981" stroke-width="3" />
+                        <text x="360" y="155" text-anchor="middle" font-size="14">🏪</text>
+                        <text x="360" y="125" text-anchor="middle" fill="#cbd5e1" font-size="11" font-weight="600">SME #3: ลุงพลปากคลอง</text>
+                    </g>
+
+                    <!-- Node 5: Vulnerable Cluster (กลุ่มบ้านผู้สูงอายุท้ายซอย 3 - เสี่ยงถูกตัดขาด) -->
+                    <g class="cursor-pointer" onclick="focusNodeInfo('vulnerable')">
+                        <circle cx="560" cy="190" r="24" fill="#f43f5e" opacity="0.25" class="pulse-circle" />
+                        <circle cx="560" cy="190" r="18" fill="#4c0519" stroke="#f43f5e" stroke-width="3" />
+                        <text x="560" y="196" text-anchor="middle" font-size="15">🆘</text>
+                        <text x="560" y="160" text-anchor="middle" fill="#fda4af" font-size="12" font-weight="700">ชุมชนท้ายซอย 3 (42 ครัวเรือน)</text>
+                    </g>
+                </svg>
+
+                <!-- Floating Telemetry Overlay on Map -->
+                <div class="absolute bottom-3 left-3 right-3 flex flex-wrap items-center justify-between gap-2 pointer-events-none">
+                    <div class="bg-slate-900/90 backdrop-blur px-3 py-1.5 rounded-lg border border-slate-700 text-xs flex items-center gap-3">
+                        <span>🌧️ ปริมาณฝนสะสม: <strong id="rainMetric" class="text-cyan-400 font-mono">45 mm/hr</strong></span>
+                        <span class="text-slate-600">|</span>
+                        <span>🏚️ ครัวเรือนเสี่ยงถูกตัดขาด: <strong id="isolatedHouseholdsMetric" class="text-rose-400 font-mono">0 หลัง</strong></span>
+                    </div>
+                    <div id="aiAlertBanner" class="bg-cyan-950/90 backdrop-blur px-3 py-1.5 rounded-lg border border-cyan-600 text-xs text-cyan-200 font-medium">
+                        🤖 AI Status: เฝ้าระวังระดับน้ำริมคลองปกติ
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom KPI Bar (Impact Metrics across 3 Tracks) -->
+            <div class="grid grid-cols-3 gap-3 mt-4">
+                <div class="bg-slate-900/90 p-3 rounded-xl border border-slate-800">
+                    <div class="text-[11px] text-slate-400">ความแม่นยำเตือนภัยระดับซอย</div>
+                    <div class="text-lg font-bold font-mono text-cyan-400 mt-0.5">±3.5 ซม.</div>
+                    <div class="text-[10px] text-slate-500">ด้วย CCTV + Crowdsourced AI</div>
+                </div>
+                <div class="bg-slate-900/90 p-3 rounded-xl border border-slate-800">
+                    <div class="text-[11px] text-slate-400">ลดเวลากู้ภัย/ส่งเสบียงหลงซอย</div>
+                    <div id="timeSavedMetric" class="text-lg font-bold font-mono text-amber-400 mt-0.5">42 นาที/เที่ยว</div>
+                    <div class="text-[10px] text-slate-500">เทียบกับแผนที่ GPS ทั่วไป</div>
+                </div>
+                <div class="bg-slate-900/90 p-3 rounded-xl border border-slate-800">
+                    <div class="text-[11px] text-slate-400">เงินหมุนเวียนใน SME ท้องถิ่น</div>
+                    <div id="localEconomyMetric" class="text-lg font-bold font-mono text-emerald-400 mt-0.5">฿128,500</div>
+                    <div class="text-[10px] text-slate-500">ผ่านคูปองเสบียงฉุกเฉิน D2C</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- RIGHT COLUMN: TRACK 2 SME MICRO-RELIEF & E-VOUCHER (3 COLS) -->
+        <aside class="lg:col-span-3 flex flex-col gap-5">
+            <section aria-labelledby="track2-heading" class="glass-panel rounded-2xl p-5 shadow-xl flex-1 flex flex-col justify-between relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1.5 h-full bg-emerald-500"></div>
+                <div>
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-xs font-mono uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">Track 2 • SME Economy</span>
+                        <span class="text-xs text-emerald-400 font-mono">D2C Hub Active</span>
+                    </div>
+                    <h2 id="track2-heading" class="text-base font-bold text-white mb-1">เครือข่ายร้านชำกระจายเสบียง (Micro-Relief)</h2>
+                    <p class="text-xs text-slate-400 mb-4">เปลี่ยนเงินบริจาค/งบ อปท. เป็น E-Voucher ให้ชาวบ้านรับของจากร้านค้าใกล้บ้านที่น้ำไม่ท่วม</p>
+
+                    <!-- Relief Pool Fund Box -->
+                    <div class="bg-gradient-to-br from-emerald-950/90 to-slate-900 p-3.5 rounded-xl border border-emerald-700/50 mb-4">
+                        <div class="flex justify-between items-center text-xs text-emerald-300 mb-1">
+                            <span>กองทุน E-Voucher ชุมชนคงเหลือ</span>
+                            <span class="font-mono bg-emerald-500/20 px-1.5 py-0.5 rounded text-[10px]">Smart Ledger</span>
+                        </div>
+                        <div class="flex items-baseline justify-between">
+                            <span id="voucherPoolBalance" class="text-xl font-bold font-mono text-white">฿45,200</span>
+                            <span class="text-xs text-slate-400">สิทธิ์คงเหลือ: <strong id="voucherQuotaCount" class="text-emerald-300">150 ชุด</strong></span>
+                        </div>
+                    </div>
+
+                    <!-- SME Store Cards List -->
+                    <div class="space-y-3" id="smeCardsContainer">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- AI Post-Flood Recovery Forecasting Box -->
+                <div class="mt-5 pt-4 border-t border-slate-800">
+                    <div class="flex items-center justify-between mb-1.5">
+                        <span class="text-xs font-bold text-slate-200 flex items-center gap-1.5">
+                            <span>📈 AI คาดการณ์สินค้าที่ต้องใช้</span>
+                        </span>
+                        <span id="demandPhaseBadge" class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-cyan-300">ระยะรับมือน้ำท่วม</span>
+                    </div>
+                    <p id="aiInventoryAdvice" class="text-xs text-slate-400 leading-relaxed bg-slate-900/90 p-3 rounded-xl border border-slate-800">
+                        แนะนำให้ SME #1 และ #2 สำรองน้ำดื่มแพ็ก, อาหารพร้อมทาน, และไฟฉาย เพิ่มขึ้น 40% เพื่อรองรับชาวบ้านจากซอย 3
+                    </p>
+                </div>
+            </section>
+        </aside>
+    </main>
+
+    <!-- ==================== MODAL: AI COMPUTER VISION WATER GAUGE ==================== -->
+    <div id="visionModal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="glass-panel max-w-lg w-full rounded-2xl p-6 border border-cyan-500/40 shadow-2xl">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <span class="text-xs font-mono text-cyan-400 uppercase">Zero-Hardware Virtual Water Gauge</span>
+                    <h3 class="text-lg font-bold text-white">ระบบ AI ประเมินความลึกน้ำจากกล้องหน้าร้านชำ</h3>
+                </div>
+                <button onclick="closeVisionModal()" class="text-slate-400 hover:text-white text-xl font-bold px-2">✕</button>
+            </div>
+            
+            <!-- Simulated Vision Frame -->
+            <div class="relative bg-slate-900 rounded-xl border border-slate-700 p-4 mb-4 overflow-hidden">
+                <div class="flex justify-between text-xs font-mono text-emerald-400 mb-2">
+                    <span>CAM_ID: SME03_SOI3_FRONT</span>
+                    <span>CONFIDENCE: 96.8%</span>
+                </div>
+                <svg viewBox="0 0 400 180" class="w-full h-40 bg-slate-950 rounded-lg border border-slate-800">
+                    <!-- Wall & Sidewalk -->
+                    <rect x="0" y="20" width="400" height="90" fill="#1e293b" />
+                    <rect x="0" y="110" width="400" height="25" fill="#475569" />
+                    <text x="15" y="126" fill="#e2e8f0" font-size="10" font-family="JetBrains Mono">ขอบฟุตบาทมาตรฐาน (อ้างอิงสูง 15 ซม.)</text>
+                    
+                    <!-- Motorcycle Wheel Reference -->
+                    <circle cx="310" cy="115" r="28" fill="none" stroke="#94a3b8" stroke-width="5" />
+                    <rect x="275" y="80" width="70" height="65" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 2" />
+                    <text x="275" y="74" fill="#f59e0b" font-size="9" font-family="JetBrains Mono">YOLO: ล้อมอเตอร์ไซค์ (40cm)</text>
+
+                    <!-- Dynamic Water Line -->
+                    <rect x="0" y="102" width="400" height="78" fill="#0284c7" opacity="0.65" />
+                    <line x1="0" y1="102" x2="400" y2="102" stroke="#38bdf8" stroke-width="2" stroke-dasharray="6 3" />
+                    <text x="15" y="96" fill="#38bdf8" font-size="11" font-weight="bold" font-family="JetBrains Mono">▲ ระดับผิวน้ำที่ AI ตรวจจับได้: ลึก 28 ซม. (ท่วมมิดฟุตบาท)</text>
+                </svg>
+                <p class="text-xs text-slate-300 mt-3 leading-relaxed">
+                    <strong>แก้ปัญหาไม่มีงบติดเซนเซอร์ทุกซอย:</strong> ใช้โมเดล Computer Vision เทียบระดับผิวน้ำกับวัตถุมาตรฐานในชุมชน (ขอบฟุตบาทเทศบาล 15 ซม. และล้อรถ) อัปเดตเข้าสู่แผนที่นำทางของ Track 5 ทันที
+                </p>
+            </div>
+            <div class="flex justify-end">
+                <button onclick="closeVisionModal()" class="px-4 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-semibold text-xs transition">
+                    เข้าใจการทำงานแล้ว
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== TOAST NOTIFICATION CONTAINER ==================== -->
+    <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none"></div>
+
+    <!-- ==================== APPLICATION LOGIC (VANILLA JS) ==================== -->
+    <script>
+        // --- 1. MOCK-UP DATASET (3 TRACKS INTEGRATED) ---
+        const timeScenarios = [
+            {
+                step: 0,
+                label: "ปัจจุบัน (T+0 ชม.)",
+                rainMm: "45 mm/hr",
+                isolatedHouseholds: 0,
+                aiBanner: "🤖 AI Status: น้ำเริ่มเอ่อท่อระบายน้ำซอยลุ่ม 3 รถเล็กควรเลี่ยง",
+                demandPhase: "ระยะเฝ้าระวัง (Pre-Impact)",
+                aiAdvice: "แนะนำให้ SME #1 และ #2 สำรองน้ำดื่มแพ็ก, ข้าวสาร, และไฟฉาย เพิ่มขึ้น 35% เนื่องจากพยากรณ์พบมวลน้ำกำลังไหลเข้าซอย 3",
+                alleys: [
+                    { id: "soi1", name: "ซอยบางหลวง 1 (ริมคลอง)", depth: 10, trend: "↑ +5cm/ชม." },
+                    { id: "soi2", name: "ซอยบางหลวง 2 (ถนนสายกลาง)", depth: 5, trend: "↑ +3cm/ชม." },
+                    { id: "soi3", name: "ซอยลุ่ม 3 (แอ่งกระทะท้ายชุมชน)", depth: 20, trend: "↑ +15cm/ชม." },
+                    { id: "bypass", name: "ทางเลี่ยงเนินสูง 4 (ถนนคันดิน)", depth: 0, trend: "คงที่ (ปลอดภัย)" }
+                ],
+                floodOpacity: { low: 0.25, deep: 0.35, market: 0.0 }
+            },
+            {
+                step: 1,
+                label: "พยากรณ์ T+3 ชม.",
+                rainMm: "82 mm/hr",
+                isolatedHouseholds: 18,
+                aiBanner: "⚠️ AI Warning: ซอย 1 และซอย 3 น้ำท่วมสูงเกินพิกัดรถเก๋ง/มอเตอร์ไซค์!",
+                demandPhase: "ระยะวิกฤต (Active Flood)",
+                aiAdvice: "ซอย 3 น้ำลึก 42 ซม.! ระบบเปิดใช้งานคูปอง E-Voucher อัตโนมัติ ให้ทีมกู้ภัยกระบะยกสูงรับเสบียงจากร้านป้าศรี (SME #1) ไปส่งท้ายซอย",
+                alleys: [
+                    { id: "soi1", name: "ซอยบางหลวง 1 (ริมคลอง)", depth: 28, trend: "↑ วิกฤต" },
+                    { id: "soi2", name: "ซอยบางหลวง 2 (ถนนสายกลาง)", depth: 14, trend: "↑ ปริ่มฟุตบาท" },
+                    { id: "soi3", name: "ซอยลุ่ม 3 (แอ่งกระทะท้ายชุมชน)", depth: 42, trend: "↑ เสี่ยงตัดขาด" },
+                    { id: "bypass", name: "ทางเลี่ยงเนินสูง 4 (ถนนคันดิน)", depth: 4, trend: "ปลอดภัย" }
+                ],
+                floodOpacity: { low: 0.6, deep: 0.75, market: 0.25 }
+            },
+            {
+                step: 2,
+                label: "พยากรณ์ T+6 ชม. (วิกฤตสูงสุด)",
+                rainMm: "110 mm/hr",
+                isolatedHouseholds: 42,
+                aiBanner: "🚨 CRITICAL: ชุมชนท้ายซอย 3 ถูกตัดขาด! โอนย้ายภารกิจเสบียงไปยัง SME #2 (ที่ดอน)",
+                demandPhase: "ระยะตัดขาด (Peak Isolation)",
+                aiAdvice: "ร้านลุงพล (SME #3) น้ำท่วมหน้าร้าน 35 ซม. ระบบโอนโควตา E-Voucher ไปยังร้านเจ๊หมวย (SME #2 โซนที่ดอน) และจัดเส้นทางเรือท้องแบนเข้ารับของแทน",
+                alleys: [
+                    { id: "soi1", name: "ซอยบางหลวง 1 (ริมคลอง)", depth: 55, trend: "⛔ รถทุกชนิดห้ามผ่าน" },
+                    { id: "soi2", name: "ซอยบางหลวง 2 (ถนนสายกลาง)", depth: 32, trend: "⚠️ เฉพาะกระบะยกสูง/เรือ" },
+                    { id: "soi3", name: "ซอยลุ่ม 3 (แอ่งกระทะท้ายชุมชน)", depth: 75, trend: "🚨 ถูกตัดขาด (ใช้เรือเท่านั้น)" },
+                    { id: "bypass", name: "ทางเลี่ยงเนินสูง 4 (ถนนคันดิน)", depth: 12, trend: "✅ เส้นทางหลักส่งเสบียง" }
+                ],
+                floodOpacity: { low: 0.9, deep: 0.95, market: 0.65 }
+            },
+            {
+                step: 3,
+                label: "ช่วงน้ำลด (Recovery Mode)",
+                rainMm: "0 mm/hr",
+                isolatedHouseholds: 0,
+                aiBanner: "🌱 Recovery Phase: น้ำลดสู่ระดับปกติ เปลี่ยน E-Voucher เป็นคูปองฟื้นฟูซ่อมแซมบ้าน",
+                demandPhase: "ระยะฟื้นฟู (Post-Flood Recovery)",
+                aiAdvice: "AI ประเมินบ้านเรือนเสียหาย 42 หลัง แนะนำ SME #2 สต็อกน้ำยาฆ่าเชื้อ, แปรงขัดพื้น, สีทาบ้าน และปูนซ่อมแซม เพื่อรองรับการใช้ E-Voucher ฟื้นฟู",
+                alleys: [
+                    { id: "soi1", name: "ซอยบางหลวง 1 (ริมคลอง)", depth: 5, trend: "↓ น้ำลดแล้ว" },
+                    { id: "soi2", name: "ซอยบางหลวง 2 (ถนนสายกลาง)", depth: 0, trend: "✅ สัญจรปกติ" },
+                    { id: "soi3", name: "ซอยลุ่ม 3 (แอ่งกระทะท้ายชุมชน)", depth: 12, trend: "↓ รอสูบน้ำค้างท่อ" },
+                    { id: "bypass", name: "ทางเลี่ยงเนินสูง 4 (ถนนคันดิน)", depth: 0, trend: "✅ สัญจรปกติ" }
+                ],
+                floodOpacity: { low: 0.15, deep: 0.2, market: 0.0 }
+            }
+        ];
+
+        const vehicleSpecs = {
+            sedan: { name: "รถเล็ก / มอเตอร์ไซค์", maxDepth: 15, minDepth: 0, icon: "🛵" },
+            pickup: { name: "รถกระบะยกสูง 4x4", maxDepth: 45, minDepth: 0, icon: "🛻" },
+            boat: { name: "เรือท้องแบนกู้ภัย", maxDepth: 300, minDepth: 25, icon: "🚤" }
+        };
+
+        const smeStores = [
+            {
+                id: 0,
+                name: "ป้าศรี มินิมาร์ท (SME #1)",
+                zone: "จุดกึ่งกลางชุมชน (ซอย 2)",
+                elevation: "สูงปานกลาง",
+                waterAtStore: [0, 8, 18, 0],
+                stockPacks: 48,
+                voucherRedeemed: 32,
+                specialty: "น้ำดื่ม, อาหารแห้ง, นมผงเด็ก, ยาสามัญ"
+            },
+            {
+                id: 1,
+                name: "เจ๊หมวย ค้าส่ง & วัสดุ (SME #2)",
+                zone: "โซนเนินสูง (ทางเลี่ยง 4)",
+                elevation: "ที่ดอน (น้ำไม่ท่วม 100%)",
+                waterAtStore: [0, 0, 2, 0],
+                stockPacks: 85,
+                voucherRedeemed: 54,
+                specialty: "ข้าวสารกระสอบ, ไฟฉาย, อุปกรณ์ซ่อมบ้าน"
+            },
+            {
+                id: 2,
+                name: "ลุงพล โชห่วยปากคลอง (SME #3)",
+                zone: "จุดตัดซอย 1-2 ใกล้คลอง",
+                elevation: "พื้นที่ลุ่มต่ำ",
+                waterAtStore: [5, 22, 48, 4],
+                stockPacks: 19,
+                voucherRedeemed: 14,
+                specialty: "ไข่ไก่, บะหมี่กึ่งสำเร็จรูป, น้ำแข็ง"
+            }
+        ];
+
+        // State Variables
+        let currentStep = 0;
+        let currentVehicle = 'sedan';
+        let selectedSmeIndex = 0;
+        let isPeaceMode = false;
+        let voucherFund = 45200;
+        let voucherQuota = 150;
+        let localEconomyTotal = 128500;
+
+        // --- 2. CORE FUNCTIONS ---
+
+        function handleTimeChange(stepValue) {
+            currentStep = parseInt(stepValue, 10);
+            if (isPeaceMode) {
+                toggleSystemMode(false); // Switch back to Crisis Mode automatically if user drags flood slider
+            }
+            renderDashboard();
+            showToast(`อัปเดตพยากรณ์ AI: ${timeScenarios[currentStep].label}`, 'info');
+        }
+
+        function selectVehicle(vehKey) {
+            currentVehicle = vehKey;
+            document.querySelectorAll('.vehicle-btn').forEach(btn => {
+                btn.className = "vehicle-btn p-2.5 rounded-xl border text-left transition flex flex-col justify-between bg-slate-900/80 border-slate-700 text-slate-300 hover:border-slate-500";
+            });
+            const activeBtn = document.getElementById(`veh-${vehKey}`);
+            activeBtn.className = "vehicle-btn p-2.5 rounded-xl border text-left transition flex flex-col justify-between bg-amber-500/20 border-amber-500 text-white shadow-lg shadow-amber-500/10";
+            
+            renderRoutingAndMap();
+            showToast(`เปลี่ยนโหมดนำทางเป็น: ${vehicleSpecs[vehKey].name}`, 'warning');
+        }
+
+        function selectSME(index) {
+            selectedSmeIndex = index;
+            renderSmeCards();
+            showToast(`เลือกคลังเสบียง: ${smeStores[index].name}`, 'success');
+        }
+
+        function redeemVoucher(smeIndex) {
+            const store = smeStores[smeIndex];
+            const storeDepth = isPeaceMode ? 0 : store.waterAtStore[currentStep];
+
+            if (storeDepth >= 30) {
+                showToast(`ไม่สามารถเบิกเสบียงจาก ${store.name} ได้ เนื่องจากน้ำท่วมหน้าร้าน (${storeDepth} ซม.) ระบบแนะนำให้เบิกจาก SME #2 แทน`, 'error');
+                return;
+            }
+            if (store.stockPacks <= 0 || voucherQuota <= 0) {
+                showToast(`สต็อกเสบียงหรือโควตาคูปองหมดแล้ว`, 'error');
+                return;
+            }
+
+            store.stockPacks -= 1;
+            store.voucherRedeemed += 1;
+            voucherQuota -= 1;
+            voucherFund -= 300;
+            localEconomyTotal += 300;
+
+            document.getElementById('voucherPoolBalance').textContent = `฿${voucherFund.toLocaleString()}`;
+            document.getElementById('voucherQuotaCount').textContent = `${voucherQuota} ชุด`;
+            document.getElementById('localEconomyMetric').textContent = `฿${localEconomyTotal.toLocaleString()}`;
+
+            renderSmeCards();
+            showToast(`✅ แลก E-Voucher (฿300) ที่ ${store.name} สำเร็จ! เงินโอนเข้าบัญชีร้านค้าทันที`, 'success');
+        }
+
+        function toggleSystemMode(forceToggle = true) {
+            if (forceToggle) {
+                isPeaceMode = !isPeaceMode;
+            }
+            const badge = document.getElementById('systemModeBadge');
+            const btnIcon = document.getElementById('modeBtnIcon');
+            const btnText = document.getElementById('modeBtnText');
+
+            if (isPeaceMode) {
+                badge.className = "px-2.5 py-0.5 text-xs font-semibold rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center gap-1.5";
+                badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400"></span> PEACE-TIME MODE (สภาวะปกติ)`;
+                btnIcon.textContent = "⛈️";
+                btnText.textContent = "จำลองเกิดวิกฤตน้ำท่วม (Crisis Mode)";
+                showToast("☀️ สลับสู่โหมดสภาวะปกติ: แพลตฟอร์มทำหน้าที่รวมร้านชำส่งด่วนในชุมชน (Quick-Commerce)", "success");
+            } else {
+                badge.className = "px-2.5 py-0.5 text-xs font-semibold rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/40 flex items-center gap-1.5";
+                badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span> CRISIS MODE ACTIVE`;
+                btnIcon.textContent = "☀️";
+                btnText.textContent = "สลับดู Peace-Time Mode";
+            }
+            renderDashboard();
+        }
+
+        // --- 3. RENDER UI UPDATES ---
+
+        function renderDashboard() {
+            const scenario = timeScenarios[currentStep];
+
+            // Update Top Labels & Telemetry
+            document.getElementById('timeLabel').textContent = isPeaceMode ? "สภาวะปกติ (ไม่มีฝน)" : scenario.label;
+            document.getElementById('rainMetric').textContent = isPeaceMode ? "0 mm/hr" : scenario.rainMm;
+            document.getElementById('isolatedHouseholdsMetric').textContent = isPeaceMode ? "0 หลัง" : `${scenario.isolatedHouseholds} หลัง`;
+            document.getElementById('aiAlertBanner').textContent = isPeaceMode
+                ? "☀️ Peace-Time Mode: ระบบคำนวณเส้นทางส่งของชำรายวันให้ไรเดอร์ท้องถิ่น"
+                : scenario.aiBanner;
+            document.getElementById('demandPhaseBadge').textContent = isPeaceMode ? "ค้าขายปกติ" : scenario.demandPhase;
+            document.getElementById('aiInventoryAdvice').textContent = isPeaceMode
+                ? "โหมดปกติ: AI วิเคราะห์สินค้าขายดีประจำสัปดาห์ของชุมชน (น้ำดื่ม, ไข่ไก่, ข้าวสาร) เพื่อรวมออเดอร์สั่งซื้อราคาส่งให้ร้านโชห่วย"
+                : scenario.aiAdvice;
+
+            // Update Track 6 Alley List
+            const alleyListEl = document.getElementById('alleyStatusList');
+            alleyListEl.innerHTML = '';
+            scenario.alleys.forEach(alley => {
+                const depth = isPeaceMode ? 0 : alley.depth;
+                let badgeClass = "bg-emerald-500/20 text-emerald-300 border-emerald-500/40";
+                if (depth > 40) badgeClass = "bg-rose-500/20 text-rose-300 border-rose-500/40";
+                else if (depth > 15) badgeClass = "bg-amber-500/20 text-amber-300 border-amber-500/40";
+
+                alleyListEl.innerHTML += `
+                    <div class="flex items-center justify-between p-2.5 rounded-lg bg-slate-900/90 border border-slate-800 text-xs">
+                        <div>
+                            <div class="font-semibold text-slate-200">${alley.name}</div>
+                            <div class="text-[11px] text-slate-400">${isPeaceMode ? 'ถนนแห้งปกติ' : alley.trend}</div>
+                        </div>
+                        <span class="px-2.5 py-1 rounded font-mono font-bold border ${badgeClass}">
+                            น้ำลึก ${depth} ซม.
+                        </span>
+                    </div>
+                `;
+            });
+
+            renderRoutingAndMap();
+            renderSmeCards();
+        }
+
+        function renderRoutingAndMap() {
+            const scenario = timeScenarios[currentStep];
+            const veh = vehicleSpecs[currentVehicle];
+
+            // Update Water Polygons Opacity
+            document.getElementById('floodZoneLow').style.opacity = isPeaceMode ? 0 : scenario.floodOpacity.low;
+            document.getElementById('floodZoneDeep').style.opacity = isPeaceMode ? 0 : scenario.floodOpacity.deep;
+            document.getElementById('floodZoneMarket').style.opacity = isPeaceMode ? 0 : scenario.floodOpacity.market;
+
+            // Update Map Labels
+            const dSoi1 = isPeaceMode ? 0 : scenario.alleys[0].depth;
+            const dSoi2 = isPeaceMode ? 0 : scenario.alleys[1].depth;
+            const dSoi3 = isPeaceMode ? 0 : scenario.alleys[2].depth;
+            const dBypass = isPeaceMode ? 0 : scenario.alleys[3].depth;
+
+            document.getElementById('map-label-soi1').textContent = `ซอย 1: ${dSoi1}cm`;
+            document.getElementById('map-label-soi2').textContent = `ซอย 2: ${dSoi2}cm`;
+            document.getElementById('map-label-soi3').textContent = `ซอยลุ่ม 3: ${dSoi3}cm`;
+            document.getElementById('map-label-bypass').textContent = `ทางเลี่ยงเนินสูง: ${dBypass}cm`;
+
+            // Colorize Road Segments based on Vehicle Clearance
+            colorizeRoad('road-soi-1', dSoi1, veh);
+            colorizeRoad('road-soi-1b', dSoi1, veh);
+            colorizeRoad('road-soi-2', dSoi2, veh);
+            colorizeRoad('road-soi-3', dSoi3, veh);
+            colorizeRoad('road-soi-3b', dSoi3, veh);
+            colorizeRoad('road-high-bypass', dBypass, veh);
+            colorizeRoad('road-east-link', Math.round((dSoi3 + dBypass) / 2), veh);
+
+            // Compute Optimal Route Path & Instructions
+            const activeRouteEl = document.getElementById('activeRoutePath');
+            const routeBox = document.getElementById('routeResultBox');
+
+            let routePathD = "";
+            let routeStatusTitle = "";
+            let routeDesc = "";
+            let routeColor = "#10b981"; // emerald
+
+            if (currentVehicle === 'boat') {
+                if (dSoi3 >= 25 || dSoi1 >= 25) {
+                    routePathD = "M 170 170 L 360 150 L 560 190";
+                    routeStatusTitle = "✅ เส้นทางร่องน้ำสำหรับเรือท้องแบน";
+                    routeDesc = "ล่องตามแนวซอย 1 (ริมคลอง) เข้าสู่ซอยลุ่ม 3 โดยตรง ระดับน้ำลึกพอสำหรับใบพัดเรือและปลอดภัยจากสายไฟต่ำ";
+                    routeColor = "#38bdf8";
+                } else {
+                    routePathD = "M 0 0";
+                    routeStatusTitle = "⚠️ ระดับน้ำตื้นเกินไปสำหรับเรือท้องแบน";
+                    routeDesc = `ระดับน้ำในซอยเฉลี่ยต่ำกว่า 25 ซม. เรือท้องแบนไม่สามารถแล่นผ่านได้ แนะนำให้ใช้รถกระบะยกสูงหรือมอเตอร์ไซค์แทน`;
+                    routeColor = "#f59e0b";
+                }
+            } else if (currentVehicle === 'sedan') {
+                if (dSoi3 <= 15 && dSoi2 <= 15) {
+                    routePathD = "M 120 460 L 250 350 L 360 150 L 560 190";
+                    routeStatusTitle = "✅ เส้นทางปกติ (ผ่านซอย 2 ➔ แวะรับของป้าศรี SME #1)";
+                    routeDesc = "น้ำยังไม่ท่วมขังเกินขอบฟุตบาท (15 ซม.) รถเล็กและไรเดอร์มอเตอร์ไซค์วิ่งส่งเสบียงได้ตามปกติ";
+                } else {
+                    routePathD = "M 120 460 Q 380 480 570 390 L 560 190";
+                    routeStatusTitle = "🔀 เปลี่ยนเส้นทางอัตโนมัติ (เลี่ยงซอย 1-3 ที่น้ำท่วมขัง)";
+                    routeDesc = `AI ตัดซอย 1 และซอย 3 ออกจากแผนที่นำทางเนื่องจากน้ำลึก ${dSoi3} ซม. (เสี่ยงเครื่องยนต์ดับ) และนำทางอ้อมไปรับเสบียงที่ SME #2 บนทางเลี่ยงเนินสูงแทน`;
+                    routeColor = "#fbbf24";
+                }
+            } else if (currentVehicle === 'pickup') {
+                if (dSoi3 <= 45 && dSoi2 <= 45) {
+                    routePathD = "M 120 460 L 250 350 L 490 300 L 560 190";
+                    routeStatusTitle = "✅ เส้นทางกู้ภัยรถกระบะยกสูง (ลุยน้ำ ≤ 45 ซม.)";
+                    routeDesc = `วิ่งผ่านซอย 2 แวะรับเสบียงที่ SME #1 (ป้าศรี) และตัดเข้าซอย 3 ได้โดยตรง (ระดับน้ำ ${dSoi3} ซม. อยู่ในเกณฑ์ปลอดภัยของรถยกสูง)`;
+                } else {
+                    routePathD = "M 120 460 Q 380 480 570 390 L 560 190";
+                    routeStatusTitle = "🚨 ซอยลุ่ม 3 น้ำลึกเกินพิกัดรถกระบะ (ใช้ทางเลี่ยงเนินสูง)";
+                    routeDesc = `ซอย 3 น้ำลึกถึง ${dSoi3} ซม. เกินขีดจำกัด 45 ซม. ให้วิ่งอ้อมทางเลี่ยงเนินสูงไปรับเสบียงที่ร้านเจ๊หมวย (SME #2) แล้วส่งต่อให้เรือท้องแบนที่จุดจอดเนินสูง`;
+                    routeColor = "#f43f5e";
+                }
+            }
+
+            activeRouteEl.setAttribute('d', routePathD);
+            activeRouteEl.setAttribute('stroke', routeColor);
+
+            routeBox.innerHTML = `
+                <div class="font-bold text-white flex items-center gap-1.5">${routeStatusTitle}</div>
+                <p class="text-slate-300 leading-relaxed">${routeDesc}</p>
+            `;
+        }
+
+        function colorizeRoad(elementId, depth, veh) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+            if (veh.name.includes("เรือ")) {
+                el.setAttribute('stroke', depth >= veh.minDepth ? '#0284c7' : '#334155');
+            } else {
+                if (depth > veh.maxDepth) {
+                    el.setAttribute('stroke', '#e11d48'); // Rose red (Blocked)
+                } else if (depth > veh.maxDepth * 0.6) {
+                    el.setAttribute('stroke', '#d97706'); // Amber (Caution)
+                } else {
+                    el.setAttribute('stroke', '#334155'); // Passable
+                }
+            }
+        }
+
+        function renderSmeCards() {
+            const container = document.getElementById('smeCardsContainer');
+            container.innerHTML = '';
+
+            smeStores.forEach((store, idx) => {
+                const depth = isPeaceMode ? 0 : store.waterAtStore[currentStep];
+                const isFlooded = depth >= 30;
+                const isSelected = idx === selectedSmeIndex;
+
+                const statusBadge = isFlooded
+                    ? `<span class="px-2 py-0.5 rounded text-[10px] font-mono bg-rose-500/20 text-rose-300 border border-rose-500/40">⛔ น้ำท่วมหน้าร้าน (${depth}cm)</span>`
+                    : `<span class="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">✅ พร้อมจ่ายเสบียง (${depth}cm)</span>`;
+
+                container.innerHTML += `
+                    <article onclick="selectSME(${idx})" class="p-3.5 rounded-xl border transition cursor-pointer ${
+                        isSelected ? 'bg-slate-800/90 border-emerald-500 shadow-lg shadow-emerald-500/10' : 'bg-slate-900/80 border-slate-800 hover:border-slate-700'
+                    }">
+                        <div class="flex items-start justify-between gap-2 mb-1.5">
+                            <div>
+                                <h3 class="text-xs font-bold text-white">${store.name}</h3>
+                                <p class="text-[11px] text-slate-400">${store.zone} • ${store.elevation}</p>
+                            </div>
+                            ${statusBadge}
+                        </div>
+                        <p class="text-[11px] text-slate-300 mb-2.5">📦 สินค้าหลัก: ${store.specialty}</p>
+                        <div class="flex items-center justify-between pt-2 border-t border-slate-800/80">
+                            <div class="text-[11px] font-mono text-slate-300">
+                                สต็อกพร้อมจ่าย: <strong class="text-emerald-400">${store.stockPacks} ชุด</strong>
+                            </div>
+                            <button onclick="event.stopPropagation(); redeemVoucher(${idx});" 
+                                class="px-2.5 py-1 rounded-lg text-[11px] font-semibold transition ${
+                                    isFlooded 
+                                    ? 'bg-slate-800 text-slate-500 cursor-not-allowed' 
+                                    : 'bg-emerald-500 hover:bg-emerald-400 text-slate-950 active:scale-95'
+                                }">
+                                🎟️ กดแลก E-Voucher
+                            </button>
+                        </div>
+                    </article>
+                `;
+            });
+        }
+
+        // --- 4. INTERACTIVE MODALS & TOASTS ---
+
+        function openVisionModal() {
+            document.getElementById('visionModal').classList.remove('hidden');
+        }
+
+        function closeVisionModal() {
+            document.getElementById('visionModal').classList.add('hidden');
+        }
+
+        function focusNodeInfo(nodeType) {
+            if (nodeType === 'vulnerable') {
+                showToast("🆘 ชุมชนท้ายซอย 3: พื้นที่แอ่งกระทะ มีผู้สูงอายุและผู้ป่วยติดเตียง 12 รายที่ต้องการเสบียงจากร้าน SME ใกล้เคียง", "warning");
+            } else {
+                showToast("🚑 จุดตั้งต้นปากซอยหลัก: จุดเชื่อมต่อถนนใหญ่สำหรับรถกู้ภัยและอาสาสมัครชุมชน", "info");
+            }
+        }
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            
+            let borderColor = 'border-cyan-500';
+            if (type === 'success') borderColor = 'border-emerald-500';
+            if (type === 'warning') borderColor = 'border-amber-500';
+            if (type === 'error') borderColor = 'border-rose-500';
+
+            toast.className = `glass-panel px-4 py-3 rounded-xl border-l-4 ${borderColor} text-xs text-white shadow-2xl transition-all duration-300 transform translate-y-2 opacity-0 pointer-events-auto`;
+            toast.innerHTML = message;
+            container.appendChild(toast);
+
+            requestAnimationFrame(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            });
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', () => {
+            renderDashboard();
+        });
+    </script>
+</body>
+</html>
